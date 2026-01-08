@@ -109,14 +109,13 @@ npm run dev
 
 ```mermaid
 graph TD
-    A[User Input] -->|PDF/Image/Text| B(FastAPI Backend)
-    B -->|OCR/Parsing| C{Extraction Engine}
-    C -->|Structured JSON| D[Safety Validator]
-    D -->|Passed| E[LLM Generation (GPT-4)]
-    D -->|Violation| C
-    E -->|Patient/Clinician Prompt| F[Final Response]
-    F -->|JSON| G[History Storage]
-    F -->|JSON| H[React Frontend]
+    User[User Input] --> Backend[FastAPI Backend]
+    Backend --> Extract{Extraction Engine}
+    Extract -->|JSON| Valid[Safety Validator]
+    Valid -->|Safe| LLM[LLM Generation]
+    Valid -->|Unsafe| Extract
+    LLM --> UI[React Frontend]
+    LLM --> DB[History Storage]
 ```
 
 -   **Backend**: FastAPI handles request orchestration, validation, and LLM chaining.
