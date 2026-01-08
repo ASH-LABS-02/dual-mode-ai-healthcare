@@ -1,0 +1,14 @@
+Patient: Jane Smith
+DOB: 02/15/1992
+Date: 10/28/2023
+
+RADIOLOGY REPORT - CHEST X-RAY PA AND LATERAL
+
+FINDINGS:
+The lungs are clear. No focal consolidation, pleural effusion, or pneumothorax.
+The heart size is normal. The mediastinal and hilar contours are unremarkable.
+The pulmonary vasculature is normal.
+The osseous structures are intact.
+
+IMPRESSION:
+Normal chest x-ray. No acute cardiopulmonary abnormality.

@@ -1,0 +1,15 @@
+Patient: Mark Twain
+DOB: 11/30/1935
+Date: 10/29/2023
+
+RADIOLOGY REPORT - CHEST X-RAY
+
+FINDINGS:
+There is a 2.5 cm rounded opacity in the right upper lobe.
+No pleural effusion.
+Heart size is bordering on cardiomegaly.
+Degenerative changes in the thoracic spine.
+
+IMPRESSION:
+1. Right upper lobe nodule, suspicious for malignancy. CT chest recommended.
+2. Mild cardiomegaly.
