@@ -115,6 +115,7 @@ def get_report_pdf(report_id: str):
         headers={"Content-Disposition": f"attachment; filename=report_{report_id}.pdf"}
     )
 
+@app.get("/")
 def health_check():
     return {"status": "ok", "message": "Backend is running"}
 
