@@ -6,6 +6,7 @@ import axios from 'axios';
 export default function InputSection({ text, setText, onAnalyze, loading }) {
     const { t } = useTranslation();
     const [uploading, setUploading] = useState(false);
+    const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
     const handleFileUpload = async (event) => {
         const file = event.target.files[0];
@@ -21,7 +22,7 @@ export default function InputSection({ text, setText, onAnalyze, loading }) {
         formData.append('file', file);
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/extract_text', formData, {
+            const response = await axios.post(`${API_BASE}/extract_text`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
