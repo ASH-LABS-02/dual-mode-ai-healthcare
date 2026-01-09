@@ -30,7 +30,8 @@ async def analyze_endpoint(request: AnalysisRequest):
         response = analyze_report(request.text, request.mode, request.language)
         # Save to history - async/background task would be better but simple sync call is fine for prototype
         try:
-             save_report(response.model_dump())
+             report_id = save_report(response.model_dump())
+             response.id = report_id
         except Exception as e:
              logger.error(f"Failed to save history: {e}")
              
@@ -95,6 +96,24 @@ def get_history_item(report_id: str):
     if not data:
         raise HTTPException(status_code=404, detail="Report not found")
     return data
+
+from fastapi.responses import Response
+from .pdf_generator import generate_report_pdf
+
+@app.get("/history/{report_id}/pdf")
+def get_report_pdf(report_id: str):
+    """Download analysis as PDF."""
+    data = get_report_detail(report_id)
+    if not data:
+        raise HTTPException(status_code=404, detail="Report not found")
+    
+    pdf_bytes = generate_report_pdf(data)
+    
+    return Response(
+        content=pdf_bytes, 
+        media_type="application/pdf", 
+        headers={"Content-Disposition": f"attachment; filename=report_{report_id}.pdf"}
+    )
 
 def health_check():
     return {"status": "ok", "message": "Backend is running"}

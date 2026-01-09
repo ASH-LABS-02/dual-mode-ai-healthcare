@@ -49,3 +49,5 @@ class ApiResponse(BaseModel):
     clinician_analysis: Optional[ClinicianSummary] = None
     safety_status: Literal["passed", "rewritten", "fallback"] = "passed"
     violations: List[Dict[str, str]] = []
+    id: Optional[str] = None
+

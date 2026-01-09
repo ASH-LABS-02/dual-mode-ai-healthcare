@@ -6,3 +6,5 @@ pytest
 httpx
 openai
 python-dotenv
+reportlab
+pypdf

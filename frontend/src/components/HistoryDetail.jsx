@@ -61,7 +61,7 @@ export default function HistoryDetail({ reportId, onBack }) {
                 >
                     <ArrowLeft className="w-6 h-6" />
                 </button>
-                <div>
+                <div className="flex-1">
                     <h2 className="text-xl font-bold text-slate-900">
                         Analysis Details
                     </h2>
@@ -69,6 +69,15 @@ export default function HistoryDetail({ reportId, onBack }) {
                         {new Date(report.timestamp || Date.now()).toLocaleString()} • {report.extraction?.report_type || 'Unknown Type'}
                     </p>
                 </div>
+                <a
+                    href={`http://127.0.0.1:8000/history/${reportId}/pdf`}
+                    className="flex items-center gap-2 text-sm font-semibold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-2 rounded-lg transition-colors border border-brand-200"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></svg>
+                    Download PDF
+                </a>
             </div>
 
             <RedFlagBanner flags={report.red_flags} />
@@ -156,8 +165,8 @@ function TabButton({ active, onClick, icon, label }) {
         <button
             onClick={onClick}
             className={`flex items-center gap-2 px-4 py-2 rounded-t-lg text-sm font-medium transition-colors border-b-2 whitespace-nowrap ${active
-                    ? 'border-brand-500 text-brand-600 bg-brand-50/50'
-                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
+                ? 'border-brand-500 text-brand-600 bg-brand-50/50'
+                : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                 }`}
         >
             {icon}
