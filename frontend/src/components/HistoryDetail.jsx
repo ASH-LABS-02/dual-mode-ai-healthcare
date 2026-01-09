@@ -12,10 +12,13 @@ export default function HistoryDetail({ reportId, onBack }) {
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('patient'); // 'patient' | 'clinician' | 'original' | 'json'
 
+    // Use same base URL strategy
+    const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
     useEffect(() => {
         const fetchReport = async () => {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/history/${reportId}`);
+                const response = await axios.get(`${API_BASE}/history/${reportId}`);
                 setReport(response.data);
             } catch (err) {
                 console.error("Failed to load report detail:", err);

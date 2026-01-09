@@ -1,11 +1,14 @@
-
 import json
 import os
 import uuid
 from datetime import datetime
 from typing import List, Optional, Dict, Any
 
-HISTORY_FILE = os.path.join(os.path.dirname(__file__), "data", "history.json")
+# Vercel Serverless environment has read-only filesystem except /tmp
+if os.environ.get("VERCEL"):
+    HISTORY_FILE = "/tmp/history.json"
+else:
+    HISTORY_FILE = os.path.join(os.path.dirname(__file__), "data", "history.json")
 
 def _load_history() -> List[Dict[str, Any]]:
     if not os.path.exists(HISTORY_FILE):

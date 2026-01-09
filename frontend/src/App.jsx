@@ -15,6 +15,10 @@ function App() {
     const [text, setText] = useState('');
     const [mode, setMode] = useState('patient'); // 'patient' or 'clinician'
 
+    // API Base URL - use env var or default to local backend
+    // In production (Vercel), this should ideally be '/api' or empty if we rewrite /api
+    const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
     // Navigation State
     const [view, setView] = useState('home'); // 'home' | 'history'
     const [selectedReportId, setSelectedReportId] = useState(null);
@@ -35,7 +39,9 @@ function App() {
             else if (i18n.language.startsWith('zh')) langName = 'Mandarin';
             else if (i18n.language.startsWith('hi')) langName = 'Hindi';
 
-            const response = await axios.post('http://127.0.0.1:8000/analyze', {
+            else if (i18n.language.startsWith('hi')) langName = 'Hindi';
+
+            const response = await axios.post(`${API_BASE}/analyze`, {
                 text,
                 mode,
                 language: langName
@@ -125,7 +131,7 @@ function App() {
                                 {analysis.id && (
                                     <div className="flex justify-end">
                                         <a
-                                            href={`http://127.0.0.1:8000/history/${analysis.id}/pdf`}
+                                            href={`${API_BASE}/history/${analysis.id}/pdf`}
                                             className="flex items-center gap-2 text-sm font-semibold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition-colors"
                                             target="_blank"
                                             rel="noopener noreferrer"
