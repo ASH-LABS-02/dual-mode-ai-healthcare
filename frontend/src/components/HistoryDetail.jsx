@@ -1,35 +1,53 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ArrowLeft, User, Stethoscope, FileText, Code, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, User, Stethoscope, FileText, Code, AlertTriangle, Download, Loader2 } from 'lucide-react';
 import PatientView from './PatientView';
 import ClinicianView from './ClinicianView';
 import RedFlagBanner from './RedFlagBanner';
+import { getReport } from '../utils/history';
 
 export default function HistoryDetail({ reportId, onBack }) {
     const [report, setReport] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [downloading, setDownloading] = useState(false);
     const [error, setError] = useState(null);
-    const [activeTab, setActiveTab] = useState('patient'); // 'patient' | 'clinician' | 'original' | 'json'
+    const [activeTab, setActiveTab] = useState('patient');
 
-    // Use same base URL strategy
     const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
     useEffect(() => {
-        const fetchReport = async () => {
-            try {
-                const response = await axios.get(`${API_BASE}/history/${reportId}`);
-                setReport(response.data);
-            } catch (err) {
-                console.error("Failed to load report detail:", err);
-                setError("Failed to load report details.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchReport();
+        const data = getReport(reportId);
+        if (data) {
+            setReport(data);
+        } else {
+            setError("Report not found in local history.");
+        }
+        setLoading(false);
     }, [reportId]);
+
+    const handleDownloadPdf = async () => {
+        if (!report) return;
+        setDownloading(true);
+        try {
+            const response = await axios.post(`${API_BASE}/generate_pdf`, report, {
+                responseType: 'blob'
+            });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `report_${reportId}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (err) {
+            console.error("PDF generation failed:", err);
+            alert("Failed to allow PDF download. Please try again.");
+        } finally {
+            setDownloading(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -72,15 +90,14 @@ export default function HistoryDetail({ reportId, onBack }) {
                         {new Date(report.timestamp || Date.now()).toLocaleString()} • {report.extraction?.report_type || 'Unknown Type'}
                     </p>
                 </div>
-                <a
-                    href={`http://127.0.0.1:8000/history/${reportId}/pdf`}
-                    className="flex items-center gap-2 text-sm font-semibold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-2 rounded-lg transition-colors border border-brand-200"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <button
+                    onClick={handleDownloadPdf}
+                    disabled={downloading}
+                    className="flex items-center gap-2 text-sm font-semibold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-2 rounded-lg transition-colors border border-brand-200 disabled:opacity-50"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></svg>
+                    {downloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                     Download PDF
-                </a>
+                </button>
             </div>
 
             <RedFlagBanner flags={report.red_flags} />

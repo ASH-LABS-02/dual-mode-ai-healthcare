@@ -8,7 +8,9 @@ import ClinicianView from './components/ClinicianView';
 import RedFlagBanner from './components/RedFlagBanner';
 import Disclaimer from './components/Disclaimer';
 import HistoryList from './components/HistoryList';
+import HistoryList from './components/HistoryList';
 import HistoryDetail from './components/HistoryDetail';
+import { saveToHistory } from './utils/history';
 
 function App() {
     const { t, i18n } = useTranslation();
@@ -47,6 +49,7 @@ function App() {
                 language: langName
             });
             setAnalysis(response.data);
+            saveToHistory(response.data);
             // Optionally auto-switch to details or just show result. Result is nice.
         } catch (err) {
             console.error(err);

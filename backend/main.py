@@ -120,6 +120,20 @@ def get_report_pdf(report_id: str):
         headers={"Content-Disposition": f"attachment; filename=report_{report_id}.pdf"}
     )
 
+@app.post("/generate_pdf")
+def generate_pdf_endpoint(report_data: ApiResponse):
+    """Generate PDF from provided report data (stateless)."""
+    pdf_bytes = generate_report_pdf(report_data.model_dump())
+    
+    # Use ID if available, otherwise timestamp
+    report_id = report_data.id or "report"
+    
+    return Response(
+        content=pdf_bytes, 
+        media_type="application/pdf", 
+        headers={"Content-Disposition": f"attachment; filename={report_id}.pdf"}
+    )
+
 @app.get("/")
 def health_check():
     return {"status": "ok", "message": "Backend is running"}

@@ -1,8 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Calendar, FileText, AlertTriangle, ArrowRight, Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { getHistory } from '../utils/history';
 
 export default function HistoryList({ onSelectReport }) {
     const { t } = useTranslation();
@@ -11,19 +12,8 @@ export default function HistoryList({ onSelectReport }) {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchHistory = async () => {
-            try {
-                const response = await axios.get('http://127.0.0.1:8000/history');
-                setHistory(response.data);
-            } catch (err) {
-                console.error("Failed to load history:", err);
-                setError("Failed to load history. Is the backend running?");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchHistory();
+        setHistory(getHistory());
+        setLoading(false);
     }, []);
 
     if (loading) {
@@ -82,8 +72,8 @@ export default function HistoryList({ onSelectReport }) {
                                         {formatDate(item.timestamp)}
                                     </span>
                                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${item.report_type === 'Radiology'
-                                            ? 'bg-purple-50 text-purple-700 border-purple-100'
-                                            : 'bg-blue-50 text-blue-700 border-blue-100'
+                                        ? 'bg-purple-50 text-purple-700 border-purple-100'
+                                        : 'bg-blue-50 text-blue-700 border-blue-100'
                                         }`}>
                                         {item.report_type}
                                     </span>
