@@ -8,7 +8,7 @@ import ClinicianView from './components/ClinicianView';
 import RedFlagBanner from './components/RedFlagBanner';
 import Disclaimer from './components/Disclaimer';
 import HistoryList from './components/HistoryList';
-import HistoryList from './components/HistoryList';
+
 import HistoryDetail from './components/HistoryDetail';
 import { saveToHistory } from './utils/history';
 
