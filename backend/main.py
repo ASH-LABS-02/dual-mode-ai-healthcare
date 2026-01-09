@@ -7,7 +7,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Dual-Mode AI Healthcare Backend")
+import os # Added import
+
+app = FastAPI(
+    title="Dual-Mode AI Healthcare Backend",
+    root_path="/api" if os.environ.get("VERCEL") else ""
+)
 
 
 origins = [
