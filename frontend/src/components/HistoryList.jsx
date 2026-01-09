@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import React, { useEffect, useState } from 'react';
+
 import { Calendar, FileText, AlertTriangle, ArrowRight, Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getHistory } from '../utils/history';
